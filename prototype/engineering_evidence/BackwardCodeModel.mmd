@@ -1,0 +1,18 @@
+﻿classDiagram
+ class Program { +Main() }
+ class MainForm { -SqlOrderStore _store; -List~Destination~ _routeList; -Screen _screen; +MainForm(); -ShowScreen(Screen); -PrimaryActionAsync(); -LoadRoutesAsync(); -CompletePurchaseAsync(); -CreateQrImage(string) }
+ class Destination { +Guid Id; +string Name; +long FareVnd }
+ class PurchaseResult { +Guid OrderId; +Guid DestinationId; +string Destination; +int Quantity; +long TotalVnd; +PaymentMethod Method; +OrderStatus Status; +string TicketCodes; +DateTime CreatedAt }
+ class PaymentMethod { <<enumeration>> Card; QrWallet }
+ class OrderStatus { <<enumeration>> Pending; Paid; Declined; ReconciliationRequired }
+ class SqlOrderStore { +GetDestinationsAsync(); +SavePurchaseAsync(PurchaseResult) }
+ class QRCoder { <<external package>> QRCodeGenerator; PngByteQRCode }
+ Program --> MainForm : starts
+ MainForm --> SqlOrderStore : loads routes and saves purchase
+ MainForm --> Destination : selects
+ MainForm --> PurchaseResult : creates
+ MainForm --> PaymentMethod : uses
+ MainForm --> OrderStatus : sets outcome
+ MainForm --> QRCoder : renders payment and ticket QR images
+ SqlOrderStore --> Destination : returns
+ SqlOrderStore --> PurchaseResult : persists

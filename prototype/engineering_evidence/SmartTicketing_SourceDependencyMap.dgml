@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DirectedGraph xmlns="http://schemas.microsoft.com/vs/2009/dgml" GraphDirection="LeftToRight">
+ <Nodes>
+  <Node Id="Program" Label="Program.cs&#10;SmartTicketing.Program"/>
+  <Node Id="MainForm" Label="MainForm.cs&#10;WinForms UI; screen flow; QR rendering"/>
+  <Node Id="Destination" Label="Models.cs&#10;Destination record"/>
+  <Node Id="PurchaseResult" Label="Models.cs&#10;PurchaseResult record"/>
+  <Node Id="PaymentMethod" Label="Models.cs&#10;PaymentMethod enum"/>
+  <Node Id="OrderStatus" Label="Models.cs&#10;OrderStatus enum"/>
+  <Node Id="SqlOrderStore" Label="SqlOrderStore.cs&#10;SQL persistence"/>
+  <Node Id="SqlClient" Label="Microsoft.Data.SqlClient&#10;Database driver"/>
+  <Node Id="QRCoder" Label="QRCoder 1.8.1&#10;Payment and ticket QR PNGs"/>
+  <Node Id="SQLServer" Label="SQL Server&#10;TicketOrder / Payment / Ticket"/>
+ </Nodes>
+ <Links>
+  <Link Source="Program" Target="MainForm" Label="starts"/>
+  <Link Source="MainForm" Target="SqlOrderStore" Label="loads routes; saves purchase"/>
+  <Link Source="MainForm" Target="Destination" Label="selects"/>
+  <Link Source="MainForm" Target="PurchaseResult" Label="creates"/>
+  <Link Source="MainForm" Target="PaymentMethod" Label="uses"/>
+  <Link Source="MainForm" Target="OrderStatus" Label="sets outcome"/>
+  <Link Source="MainForm" Target="QRCoder" Label="generates scannable QR images"/>
+  <Link Source="SqlOrderStore" Target="Destination" Label="returns"/>
+  <Link Source="SqlOrderStore" Target="PurchaseResult" Label="persists"/>
+  <Link Source="SqlOrderStore" Target="SqlClient" Label="uses"/>
+  <Link Source="SqlClient" Target="SQLServer" Label="SQL commands"/>
+ </Links>
+</DirectedGraph>

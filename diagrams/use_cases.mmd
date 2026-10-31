@@ -1,0 +1,28 @@
+flowchart LR
+ Passenger([Passenger])
+ Operator([Operator])
+ Gateway([Payment Gateway])
+ Printer([Ticket Printer])
+ subgraph TVM[Ticket Vending Machine]
+ UC1((Buy Ticket))
+ UC2((Browse Routes and Fares))
+ UC3((Pay by Card))
+ UC4((Pay by QR Wallet))
+ UC5((Cancel or Time Out))
+ UC6((Print Barcode Ticket))
+ UC7((Maintain Machine))
+ UC8((Reconcile Payment))
+ end
+ Passenger --- UC1
+ Passenger --- UC2
+ Passenger --- UC5
+ UC1 -. includes .- UC2
+ UC1 -. includes .- UC3
+ UC1 -. includes .- UC4
+ UC1 -. includes .- UC6
+ UC3 --- Gateway
+ UC4 --- Gateway
+ UC6 --- Printer
+ Operator --- UC7
+ Gateway --- UC8
+ Operator --- UC8

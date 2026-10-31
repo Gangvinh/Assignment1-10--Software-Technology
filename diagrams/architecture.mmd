@@ -1,0 +1,20 @@
+flowchart LR
+ subgraph TVM[TVM kiosk]
+ UI[Touch UI / MVC View]
+ C[Controllers]
+ D[Domain Services]
+ A[Device and Gateway Adapters]
+ L[(Local durable order cache)]
+ UI-->C-->D-->A
+ D-->L
+ end
+ API[Central Ticket API]
+ SQL[(SQL Server)]
+ CAT[Fare Catalog Service]
+ GW[Payment providers: MoMo / VNPay / ZaloPay / Acquirer]
+ OPS[Operations monitoring]
+ A<-->API
+ API-->SQL
+ API<-->CAT
+ API<-->GW
+ API-->OPS

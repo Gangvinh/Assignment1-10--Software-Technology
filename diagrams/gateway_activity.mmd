@@ -1,0 +1,19 @@
+sequenceDiagram
+ actor Passenger
+ participant UI as TVM UI
+ participant S as Payment Service
+ participant G as Gateway
+ participant DB as Order DB
+ Passenger->>UI: Select QR payment
+ UI->>S: Initiate(order, amount, idempotency key)
+ S->>DB: Save Pending order
+ S->>G: Create payment request
+ G-->>S: QR payload, provider reference, expiry
+ S-->>UI: Display QR and countdown
+ Passenger->>G: Scan and authorize in wallet
+ G->>S: Signed payment callback
+ S->>S: Verify signature, amount, order, replay/idempotency
+ S->>DB: Persist final status
+ S-->>G: Acknowledge callback
+ S-->>UI: Notify Paid or Failed
+ Note over S,DB: Unknown outcome stays pending and is reconciled

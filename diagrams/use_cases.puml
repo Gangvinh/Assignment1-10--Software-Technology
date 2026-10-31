@@ -1,0 +1,30 @@
+@startuml
+left to right direction
+actor Passenger
+actor Operator
+actor "Payment Gateway" as Gateway
+actor Printer
+rectangle "Ticket Vending Machine" {
+ usecase "Buy Ticket" as Buy
+ usecase "Browse Routes and Fares" as Browse
+ usecase "Pay by Card" as Card
+ usecase "Pay by QR Wallet" as QR
+ usecase "Cancel / Timeout" as Cancel
+ usecase "Issue Barcode Ticket" as Issue
+ usecase "Maintain Machine" as Maintain
+ usecase "Reconcile Payment" as Reconcile
+ Buy .> Browse : <<include>>
+ Buy .> Issue : <<include>>
+}
+Passenger -- Buy
+Passenger -- Browse
+Passenger -- Card
+Passenger -- QR
+Passenger -- Cancel
+Card -- Gateway
+QR -- Gateway
+Gateway -- Reconcile
+Printer -- Issue
+Operator -- Maintain
+Operator -- Reconcile
+@enduml

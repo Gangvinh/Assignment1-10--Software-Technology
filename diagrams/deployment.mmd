@@ -1,0 +1,21 @@
+flowchart LR
+ subgraph Kiosk[TVM kiosk hardware]
+ PC[Windows kiosk PC / C# app]
+ TOUCH[Touch display]
+ PR[Thermal printer]
+ EMV[Secure EMV terminal]
+ DB[(Encrypted local store)]
+ PC<-->TOUCH
+ PC-->PR
+ PC<-->EMV
+ PC-->DB
+ end
+ NET((TLS network))
+ API[Application/API server]
+ SQL[(SQL Server)]
+ GW[External payment gateway APIs]
+ MON[Monitoring/log service]
+ PC<-->NET<-->API
+ API-->SQL
+ API<-->GW
+ API-->MON

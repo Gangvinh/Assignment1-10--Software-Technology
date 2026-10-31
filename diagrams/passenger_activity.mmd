@@ -1,0 +1,19 @@
+flowchart TD
+ A([Start])-->B[Load route and fare catalog]
+ B-->C{Catalog available?}
+ C--No-->E[Show unavailable message]-->Z([End])
+ C--Yes-->D[Select destination and ticket quantity]
+ D-->F[Review total and choose payment]
+ F-->G{Method}
+ G--Card-->H[Request secure terminal authorization]
+ G--QR wallet-->I[Create order and display QR with expiry]
+ H-->J{Final status?}
+ I-->K[Wait for signed callback or status query]
+ K-->J
+ J--Approved / Paid-->L[Persist paid order idempotently]
+ L-->M[Create barcode ticket and print]
+ M-->N{Print succeeded?}
+ N--Yes-->O[Show success and receipt]-->Z
+ N--No-->P[Record ticket pending; show recovery and alert operator]-->Z
+ J--Declined / expired-->Q[Show reason; offer retry or cancel]-->Z
+ J--Unknown / timeout-->R[Keep pending and reconcile; do not issue ticket]-->Z

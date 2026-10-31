@@ -1,0 +1,28 @@
+stateDiagram-v2
+ [*] --> Idle
+ Idle --> Browsing: Start
+ Browsing --> Selecting: Catalog loaded
+ Browsing --> Unavailable: Catalog error
+ Unavailable --> Idle: Acknowledge
+ Selecting --> AwaitingPayment: Confirm order
+ AwaitingPayment --> Authorizing: Card selected
+ AwaitingPayment --> PaymentPending: QR created
+ Authorizing --> Paid: Verified approval
+ Authorizing --> Declined: Rejected
+ Authorizing --> ReconciliationRequired: Timeout / unknown
+ PaymentPending --> Paid: Verified callback/query success
+ PaymentPending --> Declined: Failure callback
+ PaymentPending --> Expired: Expiry confirmed
+ PaymentPending --> ReconciliationRequired: No definitive result
+ Selecting --> Cancelled: Cancel
+ AwaitingPayment --> Cancelled: Cancel before payment
+ Paid --> IssuingTicket: Create ticket once
+ IssuingTicket --> Completed: Print successful
+ IssuingTicket --> PrinterFault: Print failed
+ PrinterFault --> Completed: Retry / recovery recorded
+ ReconciliationRequired --> Paid: Gateway confirms success
+ ReconciliationRequired --> Declined: Gateway confirms failure
+ Completed --> Idle: Reset
+ Declined --> Idle: Reset
+ Expired --> Idle: Reset
+ Cancelled --> Idle: Reset

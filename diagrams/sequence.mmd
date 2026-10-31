@@ -1,0 +1,25 @@
+sequenceDiagram
+ actor Passenger
+ participant UI as TVM UI
+ participant TS as Ticket Service
+ participant OR as Order Repository
+ participant PG as Payment Gateway Adapter
+ participant GW as External Gateway / Terminal
+ participant TR as Ticket Repository
+ participant PR as Printer
+ Passenger->>UI: Select route and payment method
+ UI->>TS: Create order
+ TS->>OR: Persist Pending order + idempotency key
+ TS->>PG: Initiate payment
+ PG->>GW: Authorize / create QR order
+ GW-->>PG: Approved / declined / QR reference
+ PG-->>TS: Payment result
+ TS->>OR: Persist verified final status
+ alt confirmed paid
+ TS->>TR: Issue ticket once
+ TS->>PR: Print barcode
+ PR-->>UI: Print result
+ UI-->>Passenger: Show ticket / recovery message
+ else failed or unresolved
+ UI-->>Passenger: Show failure or pending reconciliation
+ end

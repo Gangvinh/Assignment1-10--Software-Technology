@@ -1,0 +1,15 @@
+classDiagram
+ class Destination {+Guid Id +string Name +int FareVnd +bool Active}
+ class TicketOrder {+Guid Id +Guid DestinationId +int Quantity +long TotalVnd +OrderStatus Status +string IdempotencyKey +DateTime CreatedAt +ConfirmPaid() +Cancel()}
+ class Payment {+Guid Id +Guid OrderId +PaymentMethod Method +string ProviderReference +long AmountVnd +PaymentStatus Status +DateTime ExpiresAt +MarkPaid() +MarkFailed()}
+ class Ticket {+Guid Id +Guid OrderId +string Barcode +DateTime IssuedAt}
+ class TicketService {+CreateOrder() +ConfirmPayment() +IssueTickets()}
+ class IPaymentGateway {<<interface>> +Initiate() +QueryStatus() +VerifyCallback()}
+ class IPrinter {<<interface>> +Print()}
+ class OrderRepository {+Save() +GetById()}
+ Destination "1" --> "0..*" TicketOrder : priced for
+ TicketOrder "1" *-- "0..1" Payment
+ TicketOrder "1" *-- "0..*" Ticket
+ TicketService --> IPaymentGateway
+ TicketService --> IPrinter
+ TicketService --> OrderRepository
